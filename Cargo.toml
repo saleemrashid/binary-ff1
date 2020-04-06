@@ -1,0 +1,23 @@
+[package]
+name = "binary-ff1"
+version = "0.1.0"
+authors = ["Saleem Rashid <dev@saleemrashid.com>"]
+edition = "2018"
+description = "Optimized Rust implementation of FF1 encryption with radix 2"
+readme = "README.md"
+repository = "https://github.com/saleemrashid/binary-ff1"
+license = "MIT OR Apache-2.0"
+keywords = ["crypto"]
+categories = ["cryptography", "no-std"]
+
+[dependencies]
+block-cipher-trait = "0.6.2"
+
+[dev-dependencies]
+aes = "0.3.2"
+fpe = "0.2.0"
+lazy_static = "1.4.0"
+num = "0.2.1"
+quickcheck = "0.9.1"
+quickcheck_macros = "0.9.1"
+rand = "0.7"
