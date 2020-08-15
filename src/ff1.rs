@@ -1,4 +1,4 @@
-use block_cipher_trait::{
+use block_cipher::{
     generic_array::{typenum::U16, ArrayLength, GenericArray},
     BlockCipher,
 };
@@ -32,7 +32,7 @@ where
     ///
     /// ```rust
     /// # use aes::{
-    /// #     block_cipher_trait::{generic_array::GenericArray, BlockCipher},
+    /// #     block_cipher::{generic_array::GenericArray, NewBlockCipher},
     /// #     Aes256,
     /// # };
     /// # use binary_ff1::{BinaryFF1, Error};
@@ -164,7 +164,7 @@ mod tests {
     use super::BinaryFF1;
 
     use aes::{
-        block_cipher_trait::{generic_array::GenericArray, BlockCipher},
+        block_cipher::{generic_array::GenericArray, NewBlockCipher},
         Aes256,
     };
 

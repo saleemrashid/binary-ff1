@@ -1,4 +1,4 @@
-use block_cipher_trait::{
+use block_cipher::{
     generic_array::{typenum::Unsigned, GenericArray},
     BlockCipher,
 };
@@ -111,9 +111,9 @@ mod tests {
     use super::PRF;
 
     use aes::{
-        block_cipher_trait::{
+        block_cipher::{
             generic_array::{typenum::Unsigned, GenericArray},
-            BlockCipher,
+            BlockCipher, NewBlockCipher,
         },
         Aes256,
     };
