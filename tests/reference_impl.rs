@@ -29,12 +29,6 @@ fn reference_impl(tweak: Vec<u8>, x: Vec<u8>) -> TestResult {
     let mut pt = x.clone();
     ff1.decrypt(&mut pt).unwrap();
 
-    if x.is_empty() {
-        // The reference implementation has a bug where an empty input will cause it to
-        // subtract with overflow.
-        return TestResult::discard();
-    }
-
     let ns = BinaryNumeralString::from_bytes_le(&x);
     let expected_ct = FF.encrypt(&tweak, &ns).unwrap().to_bytes_le();
     let expected_pt = FF.decrypt(&tweak, &ns).unwrap().to_bytes_le();
