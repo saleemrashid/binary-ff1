@@ -15,7 +15,7 @@ block-cipher = "0.8"
 
 [dev-dependencies]
 aes = "0.5"
-fpe = "0.3"
+fpe = "0.3.1"
 lazy_static = "1.4.0"
 num = "0.2.1"
 quickcheck = "0.9.1"
