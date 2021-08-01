@@ -125,6 +125,8 @@ mod tests {
 
     type BlockSize = <Aes256 as BlockCipher>::BlockSize;
 
+    const MAX_INPUT_SIZE: usize = 8192;
+
     lazy_static! {
         static ref CIPHER: Aes256 = {
             const KEY: [u8; 32] = [
@@ -136,6 +138,15 @@ mod tests {
         };
     }
 
+    fn valid_input_size(args: &[usize]) -> bool {
+        args.iter()
+            .copied()
+            .try_fold(0, usize::checked_add)
+            .map_or(false, |n| {
+                n <= MAX_INPUT_SIZE && n % BlockSize::to_usize() == 0
+            })
+    }
+
     fn random_bytes(n: usize) -> Vec<u8> {
         let mut buf = vec![0; n];
         rand::thread_rng().fill_bytes(&mut buf);
@@ -145,7 +156,7 @@ mod tests {
     /// Test that seeking is equivalent to writing zeroes.
     #[quickcheck]
     fn seek_equivalent_to_write(i: usize, j: usize, k: usize) -> TestResult {
-        if (i + j + k) % BlockSize::to_usize() != 0 {
+        if !valid_input_size(&[i, j, k]) {
             return TestResult::discard();
         }
 
@@ -174,7 +185,7 @@ mod tests {
     /// buffer.
     #[quickcheck]
     fn write_bytes_individually(n: usize) -> TestResult {
-        if n % BlockSize::to_usize() != 0 {
+        if !valid_input_size(&[n]) {
             return TestResult::discard();
         }
 
@@ -201,7 +212,7 @@ mod tests {
     /// to concatenating them.
     #[quickcheck]
     fn write_chunks_separately(i: usize, j: usize, k: usize, l: usize) -> TestResult {
-        if (i + j + k + l) % BlockSize::to_usize() != 0 {
+        if !valid_input_size(&[i, j, k, l]) {
             return TestResult::discard();
         }
 
