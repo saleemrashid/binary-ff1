@@ -11,13 +11,13 @@ keywords = ["crypto"]
 categories = ["cryptography", "no-std"]
 
 [dependencies]
-block-cipher = "0.8"
+cipher = "0.3"
 
 [dev-dependencies]
-aes = "0.5"
-fpe = "0.3.1"
-lazy_static = "1.4.0"
-num = "0.2.1"
+aes = "0.7"
+fpe = "0.5"
+lazy_static = "1.4"
+num = "0.4"
 quickcheck = "0.9.1"
 quickcheck_macros = "0.9.1"
-rand = "0.7"
+rand = "0.8"

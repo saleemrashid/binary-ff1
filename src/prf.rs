@@ -1,17 +1,17 @@
-use block_cipher::{
+use cipher::{
     generic_array::{typenum::Unsigned, GenericArray},
-    BlockCipher,
+    BlockEncrypt,
 };
 
-pub struct PRF<'a, C: BlockCipher> {
+pub struct PRF<'a, C: BlockEncrypt> {
     cipher: &'a C,
     offset: usize,
     state: GenericArray<u8, C::BlockSize>,
 }
 
-impl<'a, C: BlockCipher> Copy for PRF<'a, C> where GenericArray<u8, C::BlockSize>: Copy {}
+impl<'a, C: BlockEncrypt> Copy for PRF<'a, C> where GenericArray<u8, C::BlockSize>: Copy {}
 
-impl<'a, C: BlockCipher> Clone for PRF<'a, C>
+impl<'a, C: BlockEncrypt> Clone for PRF<'a, C>
 where
     Self: Copy,
 {
@@ -20,7 +20,7 @@ where
     }
 }
 
-impl<'a, C: BlockCipher> PRF<'a, C>
+impl<'a, C: BlockEncrypt> PRF<'a, C>
 where
     GenericArray<u8, C::BlockSize>: Copy,
 {
@@ -111,7 +111,7 @@ mod tests {
     use super::PRF;
 
     use aes::{
-        block_cipher::{
+        cipher::{
             generic_array::{typenum::Unsigned, GenericArray},
             BlockCipher, NewBlockCipher,
         },

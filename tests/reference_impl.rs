@@ -1,5 +1,5 @@
 use aes::{
-    block_cipher::{generic_array::GenericArray, NewBlockCipher},
+    cipher::{generic_array::GenericArray, NewBlockCipher},
     Aes128,
 };
 use binary_ff1::BinaryFF1;

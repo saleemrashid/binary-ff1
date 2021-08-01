@@ -1,6 +1,6 @@
-use block_cipher::{
+use cipher::{
     generic_array::{typenum::U16, ArrayLength, GenericArray},
-    BlockCipher,
+    BlockEncrypt,
 };
 
 use crate::{Error, Limbs, PRF};
@@ -9,7 +9,7 @@ use crate::{Error, Limbs, PRF};
 ///
 /// The block cipher must have a 16 byte block size and should be AES-128,
 /// AES-192, or AES-256.
-pub struct BinaryFF1<'a, C: BlockCipher> {
+pub struct BinaryFF1<'a, C: BlockEncrypt> {
     limbs: Limbs<'a>,
     prf: PRF<'a, C>,
     s_len: usize,
@@ -17,7 +17,7 @@ pub struct BinaryFF1<'a, C: BlockCipher> {
 
 impl<'a, C> BinaryFF1<'a, C>
 where
-    C: BlockCipher<BlockSize = U16>,
+    C: BlockEncrypt<BlockSize = U16>,
     C::ParBlocks: ArrayLength<GenericArray<u8, U16>>,
 {
     /// Creates an [`BinaryFF1`] instance for a given block cipher, input
@@ -32,7 +32,7 @@ where
     ///
     /// ```rust
     /// # use aes::{
-    /// #     block_cipher::{generic_array::GenericArray, NewBlockCipher},
+    /// #     cipher::{generic_array::GenericArray, NewBlockCipher},
     /// #     Aes256,
     /// # };
     /// # use binary_ff1::{BinaryFF1, Error};
@@ -164,7 +164,7 @@ mod tests {
     use super::BinaryFF1;
 
     use aes::{
-        block_cipher::{generic_array::GenericArray, NewBlockCipher},
+        cipher::{generic_array::GenericArray, NewBlockCipher},
         Aes256,
     };
 
