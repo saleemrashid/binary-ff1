@@ -37,7 +37,7 @@ jobs:
         toolchain:
           - nightly
           - stable
-          - 1.37.0
+          - 1.49.0
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -59,7 +59,7 @@ jobs:
         toolchain:
           - nightly
           - stable
-          - 1.37.0
+          - 1.49.0
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
