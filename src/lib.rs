@@ -34,4 +34,4 @@ mod prf;
 
 pub use crate::{error::Error, ff1::BinaryFF1};
 
-use crate::{limb::Limbs, prf::PRF};
+use crate::{limb::Limbs, prf::Prf};

@@ -3,7 +3,7 @@ use cipher::{
     BlockEncrypt,
 };
 
-use crate::{Error, Limbs, PRF};
+use crate::{Error, Limbs, Prf};
 
 /// A struct for performing FF1 encryption in radix 2.
 ///
@@ -11,7 +11,7 @@ use crate::{Error, Limbs, PRF};
 /// AES-192, or AES-256.
 pub struct BinaryFF1<'a, C: BlockEncrypt> {
     limbs: Limbs<'a>,
-    prf: PRF<'a, C>,
+    prf: Prf<'a, C>,
     s_len: usize,
 }
 
@@ -81,7 +81,7 @@ where
         block[8..12].copy_from_slice(&num_bits.to_be_bytes()); // [n]^4
         block[12..].copy_from_slice(&tweak_len.to_be_bytes()); // [t]^4
 
-        let mut prf = PRF::new(cipher);
+        let mut prf = Prf::new(cipher);
         prf.write(&block);
         // The specification recomputes the entirety of Q in each Feistel round, but the
         // beginning of Q can be precomputed here. If the tweak spans multiple

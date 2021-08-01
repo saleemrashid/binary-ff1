@@ -3,15 +3,15 @@ use cipher::{
     BlockEncrypt,
 };
 
-pub struct PRF<'a, C: BlockEncrypt> {
+pub struct Prf<'a, C: BlockEncrypt> {
     cipher: &'a C,
     offset: usize,
     state: GenericArray<u8, C::BlockSize>,
 }
 
-impl<'a, C: BlockEncrypt> Copy for PRF<'a, C> where GenericArray<u8, C::BlockSize>: Copy {}
+impl<'a, C: BlockEncrypt> Copy for Prf<'a, C> where GenericArray<u8, C::BlockSize>: Copy {}
 
-impl<'a, C: BlockEncrypt> Clone for PRF<'a, C>
+impl<'a, C: BlockEncrypt> Clone for Prf<'a, C>
 where
     Self: Copy,
 {
@@ -20,7 +20,7 @@ where
     }
 }
 
-impl<'a, C: BlockEncrypt> PRF<'a, C>
+impl<'a, C: BlockEncrypt> Prf<'a, C>
 where
     GenericArray<u8, C::BlockSize>: Copy,
 {
@@ -72,7 +72,7 @@ where
         }
     }
 
-    pub fn generate_s<'b>(&'b self, len: usize) -> impl Iterator<Item = u8> + 'b {
+    pub fn generate_s(&self, len: usize) -> impl Iterator<Item = u8> + '_ {
         let num_blocks = (len + C::BlockSize::to_usize() - 1) / C::BlockSize::to_usize();
         (0..num_blocks as u32)
             .flat_map(move |i| self.expand(i).into_iter())
@@ -108,7 +108,7 @@ fn xor_slice(dst: &mut [u8], src: &[u8]) {
 
 #[cfg(test)]
 mod tests {
-    use super::PRF;
+    use super::Prf;
 
     use aes::{
         cipher::{
@@ -165,13 +165,13 @@ mod tests {
         let expected = {
             let mut buf = vec![0; i + j + k];
             buf[i..i + j].copy_from_slice(&random);
-            let mut prf = PRF::new(&*CIPHER);
+            let mut prf = Prf::new(&*CIPHER);
             prf.write(&buf);
             prf.output()
         };
 
         let output = {
-            let mut prf = PRF::new(&*CIPHER);
+            let mut prf = Prf::new(&*CIPHER);
             prf.seek(i);
             prf.write(&random);
             prf.seek(k);
@@ -192,13 +192,13 @@ mod tests {
         let buf = random_bytes(n);
 
         let expected = {
-            let mut prf = PRF::new(&*CIPHER);
+            let mut prf = Prf::new(&*CIPHER);
             prf.write(&buf);
             prf.output()
         };
 
         let output = {
-            let mut prf = PRF::new(&*CIPHER);
+            let mut prf = Prf::new(&*CIPHER);
             for &x in &buf {
                 prf.write(&[x])
             }
@@ -224,13 +224,13 @@ mod tests {
         ];
 
         let expected = {
-            let mut prf = PRF::new(&*CIPHER);
+            let mut prf = Prf::new(&*CIPHER);
             prf.write(&chunks.concat());
             prf.output()
         };
 
         let output = {
-            let mut prf = PRF::new(&*CIPHER);
+            let mut prf = Prf::new(&*CIPHER);
             for chunk in &chunks {
                 prf.write(chunk);
             }
